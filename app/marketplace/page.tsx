@@ -201,12 +201,12 @@ export default function Marketplace() {
             </p>
           </motion.div>
 
-          {/* Rocket Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {/* Rocket Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {rockets.map((rocket, index) => (
               <motion.div
                 key={rocket.id}
-                className={`bg-cyber-gray/20 border-2 ${rarityColors[rocket.rarity]} backdrop-blur-sm relative overflow-hidden group hover:scale-105 transition-all duration-500 rounded-lg`}
+                className={`bg-cyber-gray/20 border-2 ${rarityColors[rocket.rarity]} backdrop-blur-sm relative overflow-visible group hover:scale-105 transition-all duration-500 rounded-lg flex flex-col h-full`}
                 initial={{ opacity: 0, y: 50, rotateY: -15 }}
                 animate={{ opacity: 1, y: 0, rotateY: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -231,7 +231,7 @@ export default function Marketplace() {
                 </div>
 
                 {/* Rocket Image */}
-                <div className="p-8 flex justify-center items-center h-64 relative overflow-hidden">
+                <div className="p-8 flex justify-center items-center h-64 relative overflow-visible">
                   {/* Holographic Background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
@@ -243,7 +243,9 @@ export default function Marketplace() {
                   <motion.img 
                     src={rocket.image} 
                     alt={rocket.name}
-                    className="max-w-full max-h-full object-contain pixel-art relative z-10"
+                    className={`max-w-full max-h-full object-contain pixel-art relative ${
+                      roamingRockets.includes(rocket.id) ? 'z-50' : 'z-10'
+                    }`}
                     animate={{
                       // Launch Animation
                       ...(launchingRockets.includes(rocket.id) ? {
@@ -253,14 +255,14 @@ export default function Marketplace() {
                         rotate: [0, -10, 5, -15, 0],
                         opacity: [1, 1, 0.8, 0.4, 0]
                       } : 
-                      // Roaming Animation
-                      roamingRockets.includes(rocket.id) ? {
-                        y: [-800, -600, -400, -500, -300, -400, -200, 0],
-                        x: [0, 100, -80, 150, -120, 200, -100, 0],
-                        scale: [0.2, 0.4, 0.6, 0.5, 0.7, 0.6, 0.8, 1],
-                        rotate: [0, 45, -30, 60, -45, 30, -15, 0],
-                        opacity: [0, 0.3, 0.6, 0.8, 0.9, 0.7, 0.9, 1]
-                      } : 
+                      // Roaming Animation - Elegant full-screen movement
+                       roamingRockets.includes(rocket.id) ? {
+                         y: [-800, -600, -400, -500, -300, -400, -200, 0],
+                         x: [0, 300, -200, 400, -300, 500, -250, 0],
+                         scale: [0.2, 0.4, 0.6, 0.5, 0.7, 0.6, 0.8, 1],
+                         rotate: [0, 45, -30, 60, -45, 30, -15, 0],
+                         opacity: [0, 0.3, 0.6, 0.8, 0.9, 0.7, 0.9, 1]
+                       } : 
                       // Normal Hover Animation
                       hoveredRocket === rocket.id ? {
                         scale: 1.1,
@@ -309,7 +311,7 @@ export default function Marketplace() {
                 </div>
 
                 {/* Rocket Info */}
-                <div className="p-6 border-t border-current/30">
+                <div className="p-6 border-t border-current/30 flex flex-col flex-grow">
                   <h3 className="font-pixel text-xl mb-2 animate-glow">{rocket.name}</h3>
                   <p className="font-arcade text-sm text-gray-300 mb-4 leading-relaxed">
                     {rocket.description}
@@ -379,14 +381,16 @@ export default function Marketplace() {
                     </motion.div>
                   </div>
 
-                  {/* Price Section */}
-                  <div className="flex items-center justify-center space-x-2 mb-4">
-                    <Coins className="w-6 h-6 text-neon-yellow animate-pulse" />
-                    <span className="font-pixel text-neon-yellow text-xl">{rocket.price} ETH</span>
-                  </div>
-                  
-                  {/* Mint Button - Full Width */}
-                  <button
+                  {/* Button Section - Always at bottom */}
+                  <div className="mt-auto">
+                    {/* Price Section */}
+                    <div className="flex items-center justify-center space-x-2 mb-4">
+                      <Coins className="w-6 h-6 text-neon-yellow animate-pulse" />
+                      <span className="font-pixel text-neon-yellow text-xl">{rocket.price} ETH</span>
+                    </div>
+                    
+                    {/* Mint Button - Full Width */}
+                    <button
                     onClick={() => mintNFT(rocket)}
                     disabled={isMinting && selectedRocket?.id === rocket.id}
                     className={`w-full neon-button font-pixel px-6 py-3 text-sm ${
@@ -411,6 +415,7 @@ export default function Marketplace() {
                     )}
                   </button>
                 </div>
+              </div>
 
                 {/* Advanced Hover Effects */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
@@ -451,7 +456,7 @@ export default function Marketplace() {
 
           {/* Info Section */}
           <motion.div 
-            className="bg-cyber-gray/20 border border-neon-blue/30 p-8 backdrop-blur-sm"
+            className="bg-cyber-gray/20 border border-neon-blue/30 p-8 backdrop-blur-sm mt-16"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -523,6 +528,8 @@ export default function Marketplace() {
           </motion.div>
         </motion.div>
       )}
+
+
 
       {/* Floating Particles */}
       <div className="fixed inset-0 pointer-events-none">

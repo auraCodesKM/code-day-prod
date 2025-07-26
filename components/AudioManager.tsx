@@ -1,12 +1,15 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Volume2, VolumeX } from 'lucide-react'
 
 export default function AudioManager() {
-  const backgroundMusicRef = useRef<HTMLAudioElement>(null)
-  const clickSoundRef = useRef<HTMLAudioElement>(null)
   const [isMuted, setIsMuted] = useState(false)
+  const [isLaunching, setIsLaunching] = useState(false)
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null)
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null)
+  const hoverSoundRef = useRef<HTMLAudioElement | null>(null)
+  const launchSoundRef = useRef<HTMLAudioElement | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export default function AudioManager() {
       
       if (
         target.tagName === 'BUTTON' ||
-        target.closest('button')
+        (target.closest && target.closest('button'))
       ) {
         playHoverSound()
       }
@@ -86,6 +89,58 @@ export default function AudioManager() {
     }
   }
 
+  // Enhanced launch audio with background music ducking
+  const playLaunchSound = useCallback(() => {
+    if (launchSoundRef.current && !isMuted) {
+      setIsLaunching(true)
+      
+      // Lower background music volume during launch
+      if (backgroundMusicRef.current) {
+        backgroundMusicRef.current.volume = 0.1
+      }
+      
+      // Play launch sound
+      launchSoundRef.current.currentTime = 0
+      launchSoundRef.current.play().catch(console.log)
+      
+      // Restore background music after launch sound finishes (2 seconds)
+      setTimeout(() => {
+        if (backgroundMusicRef.current) {
+          backgroundMusicRef.current.volume = 0.6
+        }
+        setIsLaunching(false)
+      }, 2000)
+    }
+  }, [isMuted])
+
+  // Play launch sound on landing (when rocket returns)
+  const playLandingSound = useCallback(() => {
+    if (launchSoundRef.current && !isMuted) {
+      // Lower background music briefly for landing
+      if (backgroundMusicRef.current) {
+        backgroundMusicRef.current.volume = 0.2
+      }
+      
+      // Play launch sound for landing
+      launchSoundRef.current.currentTime = 0
+      launchSoundRef.current.play().catch(console.log)
+      
+      // Restore background music after landing sound
+      setTimeout(() => {
+        if (backgroundMusicRef.current) {
+          backgroundMusicRef.current.volume = 0.6
+        }
+      }, 1500)
+    }
+  }, [isMuted])
+
+  // Initialize launch sound volume
+  useEffect(() => {
+    if (launchSoundRef.current) {
+      launchSoundRef.current.volume = 0.7
+    }
+  }, [])
+
   const toggleMute = () => {
     setIsMuted(!isMuted)
     
@@ -125,6 +180,16 @@ export default function AudioManager() {
         muted={isMuted}
       >
         <source src="/audio/clickSound.wav" type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+
+      {/* Launch Sound Effect */}
+      <audio
+        ref={launchSoundRef}
+        preload="auto"
+        muted={isMuted}
+      >
+        <source src="/audio/launch-sound.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
 
