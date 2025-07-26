@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00f3ff;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #00f3ff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #39ff14;
+  box-shadow: 0 0 15px #39ff14;
+}
+
+/* Pixel perfect rendering */
+* {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Glitch effect utility */
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff0080;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.5s infinite;
+  color: #00f3ff;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0%, 14%, 15%, 49%, 50%, 99%, 100% {
+    transform: translate(0);
+  }
+  15%, 49% {
+    transform: translate(-2px, -1px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%, 20%, 21%, 62%, 63%, 99%, 100% {
+    transform: translate(0);
+  }
+  21%, 62% {
+    transform: translate(2px, 1px);
+  }
+}
+
+/* Scan line effect */
+.scan-lines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 50%,
+    rgba(0, 243, 255, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* CRT effect */
+.crt-effect {
+  position: relative;
+}
+
+.crt-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.25) 50%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Neon button styles */
+.neon-button {
+  position: relative;
+  background: transparent;
+  border: 2px solid currentColor;
+  color: #00f3ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.neon-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 243, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.neon-button:hover::before {
+  left: 100%;
+}
+
+.neon-button:hover {
+  color: #39ff14;
+  border-color: #39ff14;
+  box-shadow: 
+    0 0 20px #39ff14,
+    inset 0 0 20px rgba(57, 255, 20, 0.1);
+}
+
+/* Pixel art scaling */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Health bar animation */
+.health-bar-fill {
+  transition: width 0.5s ease-in-out;
+  background: linear-gradient(90deg, #39ff14, #ffff00, #ff0080);
+}
+
+/* Score counter animation */
+.score-counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Enhanced Starfield animation */
+.starfield {
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #00f3ff, transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(57,255,20,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(2px 2px at 130px 80px, rgba(255,0,128,0.6), transparent),
+    radial-gradient(1px 1px at 160px 30px, #ffff00, transparent),
+    radial-gradient(3px 3px at 200px 50px, rgba(191,0,255,0.4), transparent);
+  background-repeat: repeat;
+  background-size: 300px 150px;
+  animation: starfield-move 25s linear infinite;
+}
+
+@keyframes starfield-move {
+  from { background-position: 0 0; }
+  to { background-position: -300px -150px; }
+}
+
+/* Cosmic dust effect */
+.cosmic-dust {
+  background-image: 
+    radial-gradient(1px 1px at 10px 20px, rgba(0,243,255,0.3), transparent),
+    radial-gradient(1px 1px at 50px 80px, rgba(57,255,20,0.2), transparent),
+    radial-gradient(1px 1px at 120px 40px, rgba(255,0,128,0.3), transparent);
+  background-size: 100px 100px;
+  animation: cosmic-drift 30s linear infinite;
+}
+
+@keyframes cosmic-drift {
+  from { background-position: 0 0; }
+  to { background-position: 100px 100px; }
+}
