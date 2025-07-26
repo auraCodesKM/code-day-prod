@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Rocket, Zap, Trophy, Skull, Star, Shield, Coins } from 'lucide-react'
+import Link from 'next/link'
 import AudioManager from '../components/AudioManager'
 
 export default function Home() {
@@ -189,12 +190,14 @@ export default function Home() {
                 </span>
               </button>
               
-              <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl border-neon-yellow text-neon-yellow hover:border-neon-green hover:text-neon-green group">
-                <span className="flex items-center space-x-3">
-                  <Coins className="w-6 h-6 animate-pulse" />
-                  <span>MINT YOUR FLEET</span>
-                </span>
-              </button>
+              <Link href="/marketplace">
+                <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl border-neon-yellow text-neon-yellow hover:border-neon-green hover:text-neon-green group">
+                  <span className="flex items-center space-x-3">
+                    <Coins className="w-6 h-6 animate-pulse" />
+                    <span>MINT YOUR FLEET</span>
+                  </span>
+                </button>
+              </Link>
               
               <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl border-neon-purple text-neon-purple hover:border-neon-pink hover:text-neon-pink group">
                 <span className="flex items-center space-x-3">
