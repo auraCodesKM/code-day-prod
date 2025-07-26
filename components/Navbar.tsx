@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Rocket } from 'lucide-react'
+import { Rocket, Wallet, CheckCircle } from 'lucide-react'
+import { useWeb3 } from './Web3Provider'
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -14,6 +15,7 @@ const navItems = [
 
 export default function Navbar() {
   const pathname = usePathname()
+  const { isConnected, account, connectWallet, isConnecting } = useWeb3()
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 pt-4 px-4">
@@ -51,9 +53,25 @@ export default function Navbar() {
           </ul>
 
           {/* Connect Wallet Button */}
-          <button className="font-pixel text-xs px-4 py-2 rounded-lg bg-neon-blue/10 text-neon-blue border border-neon-blue/50 hover:bg-neon-blue/20 transition-all">
-            CONNECT
-          </button>
+          {isConnected && account ? (
+            <div className="flex items-center space-x-2 bg-neon-green/10 border border-neon-green/50 px-4 py-2 rounded-lg">
+              <CheckCircle className="w-4 h-4 text-neon-green" />
+              <span className="font-pixel text-xs text-neon-green">
+                {account.slice(0, 6)}...{account.slice(-4)}
+              </span>
+            </div>
+          ) : (
+            <button 
+              onClick={connectWallet}
+              disabled={isConnecting}
+              className="font-pixel text-xs px-4 py-2 rounded-lg bg-neon-blue/10 text-neon-blue border border-neon-blue/50 hover:bg-neon-blue/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="flex items-center space-x-2">
+                <Wallet className="w-4 h-4" />
+                <span>{isConnecting ? 'CONNECTING...' : 'CONNECT'}</span>
+              </span>
+            </button>
+          )}
         </div>
       </nav>
     </div>

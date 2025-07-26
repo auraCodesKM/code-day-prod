@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Rocket, Zap, Trophy, Skull, Star, Shield, Coins } from 'lucide-react'
+import { Rocket, Zap, Trophy, Skull, Star, Shield, Coins, Wallet, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import AudioManager from '../components/AudioManager'
+import { useWeb3 } from '../components/Web3Provider'
 
 export default function Home() {
+  const { isConnected, account, connectWallet, isConnecting, error } = useWeb3()
   const [score, setScore] = useState(0)
   const [health, setHealth] = useState(100)
   const [isLoading, setIsLoading] = useState(true)
@@ -144,12 +146,25 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.4 }}
             >
-              <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl group relative overflow-hidden">
-                <span className="relative z-10 flex items-center space-x-3">
-                  <Rocket className="w-6 h-6 animate-float" />
-                  <span>START MISSION</span>
-                </span>
-              </button>
+              {!isConnected ? (
+                <button 
+                  onClick={connectWallet}
+                  disabled={isConnecting}
+                  className="neon-button font-pixel px-8 py-4 text-lg md:text-xl group relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center space-x-3">
+                    <Wallet className="w-6 h-6 animate-float" />
+                    <span>{isConnecting ? 'CONNECTING...' : 'CONNECT WALLET'}</span>
+                  </span>
+                </button>
+              ) : (
+                <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl group relative overflow-hidden">
+                  <span className="relative z-10 flex items-center space-x-3">
+                    <Rocket className="w-6 h-6 animate-float" />
+                    <span>START MISSION</span>
+                  </span>
+                </button>
+              )}
               
               <Link href="/marketplace">
                 <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl border-neon-yellow text-neon-yellow hover:border-neon-green hover:text-neon-green group">
@@ -161,12 +176,44 @@ export default function Home() {
               </Link>
               
               <button className="neon-button font-pixel px-8 py-4 text-lg md:text-xl border-neon-purple text-neon-purple hover:border-neon-pink hover:text-neon-pink group">
-                <span className="flex items-center space-x-3">
+                <span className="relative z-10 flex items-center space-x-3">
                   <Star className="w-6 h-6" />
                   <span>VIEW FLEET</span>
                 </span>
               </button>
             </motion.div>
+
+            {/* Wallet Connection Status */}
+            {isConnected && account && (
+              <motion.div 
+                className="mt-6 p-4 border border-neon-green bg-neon-green/10 backdrop-blur-sm max-w-md mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.8 }}
+              >
+                <div className="flex items-center justify-center space-x-2 text-neon-green">
+                  <Wallet className="w-5 h-5" />
+                  <span className="font-pixel text-sm">
+                    CONNECTED: {account.slice(0, 6)}...{account.slice(-4)}
+                  </span>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <motion.div 
+                className="mt-6 p-4 border border-red-500 bg-red-500/10 backdrop-blur-sm max-w-md mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.8 }}
+              >
+                <div className="flex items-center justify-center space-x-2 text-red-400">
+                  <AlertCircle className="w-5 h-5" />
+                  <span className="font-pixel text-sm">{error}</span>
+                </div>
+              </motion.div>
+            )}
 
             {/* Warning Message */}
             <motion.div 

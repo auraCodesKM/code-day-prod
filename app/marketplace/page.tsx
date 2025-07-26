@@ -5,6 +5,9 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Wallet, Zap, Shield, Star, Coins, Rocket, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import AudioManager from '../../components/AudioManager'
+import { useWeb3 } from '../../components/Web3Provider'
+import { NFTService } from '../../components/NFTService'
+import { getNetworkName } from '../../config/contracts'
 
 interface Rocket {
   id: number
@@ -58,15 +61,16 @@ const rarityColors = {
 }
 
 export default function Marketplace() {
+  const { isConnected, account, connectWallet, isConnecting, error, getSigner, chainId } = useWeb3()
   const [selectedRocket, setSelectedRocket] = useState<Rocket | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
-  const [walletAddress, setWalletAddress] = useState('')
   const [isMinting, setIsMinting] = useState(false)
   const [mintSuccess, setMintSuccess] = useState(false)
+  const [mintError, setMintError] = useState<string | null>(null)
   const [pageLoaded, setPageLoaded] = useState(false)
   const [hoveredRocket, setHoveredRocket] = useState<number | null>(null)
   const [launchingRockets, setLaunchingRockets] = useState<number[]>([])
   const [roamingRockets, setRoamingRockets] = useState<number[]>([])
+  const [nftService, setNftService] = useState<NFTService | null>(null)
 
   const playLaunchSound = () => {
     const audio = new Audio('/audio/launch-sound.mp3')
@@ -102,11 +106,15 @@ export default function Marketplace() {
     }, 2000)
   }
 
-  const connectWallet = async () => {
-    // Simulate wallet connection
-    setIsConnected(true)
-    setWalletAddress('0x1234...abcd')
-  }
+  // Initialize NFT service when signer is available
+  useEffect(() => {
+    if (isConnected && account && chainId) {
+      const signer = getSigner()
+      if (signer) {
+        setNftService(new NFTService(signer, chainId))
+      }
+    }
+  }, [isConnected, account, chainId, getSigner])
 
   const mintNFT = async (rocket: Rocket) => {
     if (!isConnected) {
@@ -114,15 +122,29 @@ export default function Marketplace() {
       return
     }
 
+    if (!nftService) {
+      setMintError('NFT service not initialized')
+      return
+    }
+
     setIsMinting(true)
     setSelectedRocket(rocket)
+    setMintError(null)
     
-    // Simulate blockchain transaction
-    setTimeout(() => {
+    try {
+      const result = await nftService.mintNFT(rocket)
+      
+      if (result.success) {
+        setMintSuccess(true)
+        setTimeout(() => setMintSuccess(false), 3000)
+      } else {
+        setMintError(result.error || 'Failed to mint NFT')
+      }
+    } catch (error: any) {
+      setMintError(error.message || 'Failed to mint NFT')
+    } finally {
       setIsMinting(false)
-      setMintSuccess(true)
-      setTimeout(() => setMintSuccess(false), 3000)
-    }, 3000)
+    }
   }
 
   // Launch all rockets when page loads
@@ -163,19 +185,29 @@ export default function Marketplace() {
 
           {/* Wallet Connection */}
           <div className="flex items-center space-x-4">
-            {isConnected ? (
-              <div className="flex items-center space-x-2 bg-cyber-gray/50 border border-neon-green px-4 py-2 backdrop-blur-sm">
-                <CheckCircle className="w-4 h-4 text-neon-green" />
-                <span className="font-pixel text-neon-green text-xs">{walletAddress}</span>
+            {isConnected && account ? (
+              <div className="flex flex-col items-end space-y-1">
+                <div className="flex items-center space-x-2 bg-cyber-gray/50 border border-neon-green px-4 py-2 backdrop-blur-sm">
+                  <CheckCircle className="w-4 h-4 text-neon-green" />
+                  <span className="font-pixel text-neon-green text-xs">
+                    {account.slice(0, 6)}...{account.slice(-4)}
+                  </span>
+                </div>
+                {chainId && (
+                  <div className="text-xs text-neon-blue font-arcade">
+                    {getNetworkName(chainId)}
+                  </div>
+                )}
               </div>
             ) : (
               <button
                 onClick={connectWallet}
+                disabled={isConnecting}
                 className="neon-button font-pixel px-4 py-2 text-sm text-neon-blue hover:text-neon-green"
               >
                 <span className="flex items-center space-x-2">
                   <Wallet className="w-4 h-4" />
-                  <span>CONNECT WALLET</span>
+                  <span>{isConnecting ? 'CONNECTING...' : 'CONNECT WALLET'}</span>
                 </span>
               </button>
             )}
@@ -386,7 +418,9 @@ export default function Marketplace() {
                     {/* Price Section */}
                     <div className="flex items-center justify-center space-x-2 mb-4">
                       <Coins className="w-6 h-6 text-neon-yellow animate-pulse" />
-                      <span className="font-pixel text-neon-yellow text-xl">{rocket.price} ETH</span>
+                      <span className="font-pixel text-neon-yellow text-xl">
+                        {rocket.id === 1 ? '0.01' : rocket.id === 2 ? '0.025' : '0.05'} ETH
+                      </span>
                     </div>
                     
                     {/* Mint Button - Full Width */}
@@ -526,6 +560,52 @@ export default function Marketplace() {
               </div>
             </div>
           </motion.div>
+        </motion.div>
+      )}
+
+      {/* Error Modal */}
+      {mintError && (
+        <motion.div 
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="bg-cyber-gray border-2 border-red-500 p-8 max-w-md mx-4 backdrop-blur-sm"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="text-center">
+              <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4 animate-pulse" />
+              <h3 className="font-pixel text-2xl text-red-500 mb-4">MINT FAILED!</h3>
+              <p className="font-arcade text-sm text-gray-300 mb-6">
+                {mintError}
+              </p>
+              <button
+                onClick={() => setMintError(null)}
+                className="neon-button font-pixel px-6 py-3 text-sm border-red-500 text-red-500 hover:border-red-400 hover:text-red-400"
+              >
+                <span>DISMISS</span>
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Web3 Error Display */}
+      {error && (
+        <motion.div 
+          className="fixed top-4 right-4 bg-red-500/90 border border-red-400 p-4 backdrop-blur-sm z-50"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center space-x-2 text-red-100">
+            <AlertCircle className="w-5 h-5" />
+            <span className="font-pixel text-sm">{error}</span>
+          </div>
         </motion.div>
       )}
 

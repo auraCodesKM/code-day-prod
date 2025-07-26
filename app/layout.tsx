@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Navbar from '../components/Navbar'
+import { Web3Provider } from '../components/Web3Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,8 +24,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
       </head>
       <body className={`${inter.className} bg-space-black overflow-x-hidden`}>
-        <main>{children}</main>
-        <Navbar />
+        <Web3Provider>
+          <main>{children}</main>
+          <Navbar />
+        </Web3Provider>
       </body>
     </html>
   )
