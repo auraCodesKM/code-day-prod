@@ -1,4 +1,4 @@
-// File: /Users/tanvirsinghsandhu/Desktop/Code Day Changiarh New/new-game/app/layout.tsx
+// File: /Users/kavinthakur/Desktop/code/codeday-game/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

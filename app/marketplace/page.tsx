@@ -168,52 +168,7 @@ export default function Marketplace() {
       <div className="absolute inset-0 scan-lines opacity-20" />
       <div className="absolute inset-0 crt-effect" />
 
-      {/* Header */}
-      <header className="relative z-10 p-4 border-b border-neon-blue/30">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-3 hover:text-neon-green transition-colors duration-300">
-            <ArrowLeft className="w-6 h-6 text-neon-blue" />
-            <span className="font-pixel text-neon-blue text-sm">BACK TO MISSION</span>
-          </Link>
 
-          <div className="flex items-center space-x-2">
-            <Rocket className="w-8 h-8 text-neon-blue animate-float" />
-            <span className="font-pixel text-neon-blue text-lg animate-glow">
-              FLEET MARKETPLACE
-            </span>
-          </div>
-
-          {/* Wallet Connection */}
-          <div className="flex items-center space-x-4">
-            {isConnected && account ? (
-              <div className="flex flex-col items-end space-y-1">
-                <div className="flex items-center space-x-2 bg-cyber-gray/50 border border-neon-green px-4 py-2 backdrop-blur-sm">
-                  <CheckCircle className="w-4 h-4 text-neon-green" />
-                  <span className="font-pixel text-neon-green text-xs">
-                    {account.slice(0, 6)}...{account.slice(-4)}
-                  </span>
-                </div>
-                {chainId && (
-                  <div className="text-xs text-neon-blue font-arcade">
-                    {getNetworkName(chainId)}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={connectWallet}
-                disabled={isConnecting}
-                className="neon-button font-pixel px-4 py-2 text-sm text-neon-blue hover:text-neon-green"
-              >
-                <span className="flex items-center space-x-2">
-                  <Wallet className="w-4 h-4" />
-                  <span>{isConnecting ? 'CONNECTING...' : 'CONNECT WALLET'}</span>
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="relative z-10 p-6">
