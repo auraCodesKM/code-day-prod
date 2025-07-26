@@ -71,6 +71,19 @@ export default function Marketplace() {
   const [launchingRockets, setLaunchingRockets] = useState<number[]>([])
   const [roamingRockets, setRoamingRockets] = useState<number[]>([])
   const [nftService, setNftService] = useState<NFTService | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [starPositions, setStarPositions] = useState<Array<{left: number, top: number, duration: number, delay: number}>>([])
+
+  // Initialize star positions on client side to prevent hydration mismatch
+  useEffect(() => {
+    const positions = Array.from({ length: 15 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 4 + Math.random() * 2,
+      delay: Math.random() * 2
+    }))
+    setStarPositions(positions)
+  }, [])
 
   const playLaunchSound = () => {
     const audio = new Audio('/audio/launch-sound.mp3')
@@ -171,7 +184,7 @@ export default function Marketplace() {
 
 
       {/* Main Content */}
-      <main className="relative z-10 p-6">
+      <main className="relative z-10 pt-24 p-6">
         <div className="max-w-7xl mx-auto">
           {/* Page Title */}
           <motion.div 
@@ -568,13 +581,13 @@ export default function Marketplace() {
 
       {/* Floating Particles */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {starPositions.map((star, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-neon-blue rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
             }}
             animate={{
               y: [0, -30, 0],
@@ -582,9 +595,9 @@ export default function Marketplace() {
               scale: [1, 1.5, 1],
             }}
             transition={{
-              duration: 4 + Math.random() * 2,
+              duration: star.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: star.delay,
             }}
           />
         ))}

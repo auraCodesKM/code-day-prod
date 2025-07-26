@@ -69,24 +69,26 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
             setChainId(Number(network.chainId))
           }
           
-          // Listen for account changes
-          (ethereumProvider as any).on('accountsChanged', (accounts: string[]) => {
-            if (accounts.length === 0) {
-              setAccount(null)
-              setSigner(null)
-              setIsConnected(false)
-            } else {
-              setAccount(accounts[0])
-              browserProvider.getSigner().then(setSigner)
-              setIsConnected(true)
-            }
-          })
-          
-          // Listen for chain changes
-          (ethereumProvider as any).on('chainChanged', (chainId: string) => {
-            setChainId(Number(chainId))
-            window.location.reload()
-          })
+          // Listen for account changes (only if provider supports events)
+          if (ethereumProvider && typeof (ethereumProvider as any).on === 'function') {
+            (ethereumProvider as any).on('accountsChanged', (accounts: string[]) => {
+              if (accounts.length === 0) {
+                setAccount(null)
+                setSigner(null)
+                setIsConnected(false)
+              } else {
+                setAccount(accounts[0])
+                browserProvider.getSigner().then(setSigner)
+                setIsConnected(true)
+              }
+            })
+            
+            // Listen for chain changes
+            (ethereumProvider as any).on('chainChanged', (chainId: string) => {
+              setChainId(Number(chainId))
+              window.location.reload()
+            })
+          }
           
         } else {
           setError('No Ethereum provider found. Please install MetaMask.')
