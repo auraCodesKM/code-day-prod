@@ -93,7 +93,7 @@ export const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
         }
       } catch (err) {
         console.error('Error initializing provider:', err)
-        setError('Failed to initialize Web3 provider')
+        // setError('Failed to initialize Web3 provider')
       }
     }
     
