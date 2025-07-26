@@ -208,3 +208,28 @@
   from { background-position: 0 0; }
   to { background-position: 100px 100px; }
 }
+
+/* Glassy Neon Navbar */
+.glass-navbar {
+  background: rgba(15, 15, 25, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 243, 255, 0.15);
+  border-radius: 1.5rem; /* 24px */
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.1), inset 0 0 5px rgba(0, 243, 255, 0.1);
+  padding: 0.5rem; /* 8px */
+  transition: all 0.3s ease;
+}
+
+.glass-navbar:hover {
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.2), inset 0 0 10px rgba(0, 243, 255, 0.15);
+}
+
+/* Custom font definitions */
+.font-pixel {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.font-arcade {
+  font-family: 'Orbitron', sans-serif;
+}

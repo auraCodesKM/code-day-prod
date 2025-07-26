@@ -62,51 +62,12 @@ export default function Home() {
       {/* CRT Effect */}
       <div className="absolute inset-0 crt-effect" />
 
-      {/* Header HUD */}
-      <header className="relative z-10 p-4 border-b border-neon-blue/30">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <motion.div 
-            className="flex items-center space-x-2"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <Rocket className="w-8 h-8 text-neon-blue animate-float" />
-            <span className="font-pixel text-neon-blue text-sm md:text-lg animate-glow">
-              MISSION LAUNCH
-            </span>
-          </motion.div>
 
-          {/* HUD Stats */}
-          <div className="flex items-center space-x-6">
-            {/* Health Bar */}
-            <div className="flex items-center space-x-2">
-              <Shield className="w-5 h-5 text-neon-green" />
-              <div className="w-24 h-3 bg-cyber-gray border border-neon-green">
-                <div 
-                  className="h-full health-bar-fill"
-                  style={{ width: `${health}%` }}
-                />
-              </div>
-              <span className="font-pixel text-neon-green text-xs">{health}</span>
-            </div>
-
-            {/* Score Counter */}
-            <div className="flex items-center space-x-2">
-              <Trophy className="w-5 h-5 text-neon-yellow" />
-              <span className="font-pixel text-neon-yellow text-xs score-counter">
-                {score.toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex flex-col">
         {/* Hero Section */}
-        <section className="flex-1 flex items-center justify-center px-4 py-12">
+                <section className="flex-1 flex items-center justify-center px-4 pt-32 pb-12">
           <div className="max-w-4xl mx-auto text-center">
             {/* Main Title */}
             <motion.h1 
