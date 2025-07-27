@@ -157,16 +157,36 @@ export class SpaceLaunchGameService {
     try {
       console.log('🔍 Checking NFT approval for token:', tokenId, 'user:', userAddress)
       
+      // Validate contract addresses
       const gameContractAddress = await this.contract!.getAddress()
-      console.log('🎯 Game contract address:', gameContractAddress)
+      const nftContractAddress = await this.nftContract!.getAddress()
       
-
+      console.log('🎯 Game contract address:', gameContractAddress)
+      console.log('🎯 NFT contract address:', nftContractAddress)
+      
+      // Check if the NFT contract has code deployed
+      const nftContractCode = await this.provider!.getCode(nftContractAddress)
+      if (nftContractCode === '0x') {
+        throw new Error(`NFT contract at ${nftContractAddress} has no code deployed`)
+      }
+      
+      console.log('✅ NFT contract has code deployed')
+      
+      // Try to call isApprovedForAll with better error handling
       const isApprovedForAll = await this.nftContract!.isApprovedForAll(userAddress, gameContractAddress)
       console.log('✅ Is approved for all:', isApprovedForAll)
       
       return isApprovedForAll
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Error checking NFT approval:', error)
+      
+      // Provide more specific error messages
+      if (error.code === 'BAD_DATA') {
+        console.error('❌ Contract call returned empty data - contract may not exist or function signature mismatch')
+      } else if (error.code === 'CALL_EXCEPTION') {
+        console.error('❌ Contract call failed - function may not exist or contract not deployed')
+      }
+      
       return false
     }
   }
