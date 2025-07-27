@@ -1,12 +1,10 @@
 const hre = require("hardhat");
 
 async function main() {
-  // Get the deployer account
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);
 
-  // Deploy the SpaceNFT contract
-  // For testing, we'll use the deployer as the treasury
+
   const SpaceNFT = await hre.ethers.getContractFactory("SpaceNFT");
   const spaceNFT = await SpaceNFT.deploy(deployer.address);
 
@@ -16,7 +14,6 @@ async function main() {
   console.log("SpaceNFT deployed to:", contractAddress);
   console.log("Treasury address:", deployer.address);
 
-  // Log the fees for verification
   const ship1Fee = await spaceNFT.ship1Fee();
   const ship2Fee = await spaceNFT.ship2Fee();
   const ship3Fee = await spaceNFT.ship3Fee();
