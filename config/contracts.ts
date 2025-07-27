@@ -1,18 +1,48 @@
 // Contract configuration
 export const CONTRACTS = {
-  // Replace with your actual deployed contract addresses
+  // NFT Contract addresses
   NFT_CONTRACT: {
     // Ethereum Mainnet (for production)
     '1': '0x0000000000000000000000000000000000000000', // Replace with actual address
     
     // Sepolia Testnet (for testing)
-    '11155111': '0xbdFD697ae59ECbDe6B25D632f064Ec9F0ab8A1F7', // Replace with actual address
+    '11155111': '0xc624865cD93c176a6016814e3560753b7Cb26C38', // New NFT contract
     
     // Local Hardhat Network
     '31337': '0x0000000000000000000000000000000000000000', // Replace with actual address
     
     // Default fallback
-    'default': '0x0000000000000000000000000000000000000000'
+    'default': '0xc624865cD93c176a6016814e3560753b7Cb26C38'
+  },
+  
+  // SpaceLaunchGame Contract addresses
+  SPACE_LAUNCH_GAME: {
+    // Ethereum Mainnet (for production)
+    '1': '0x0000000000000000000000000000000000000000', // Replace with actual address
+    
+    // Sepolia Testnet (for testing)
+    '11155111': '0x4d01f42Fa321C89593428564E89e9c55930C5A3D', // Game contract
+    
+    // Local Hardhat Network
+    '31337': '0x0000000000000000000000000000000000000000', // Replace with actual address
+    
+    // Default fallback
+    'default': '0x4d01f42Fa321C89593428564E89e9c55930C5A3D'
+  },
+  
+  // ERC20 Token Contract addresses (GALACTIC tokens)
+  ERC20_TOKEN: {
+    // Ethereum Mainnet (for production)
+    '1': '0x0000000000000000000000000000000000000000', // Replace with actual address
+    
+    // Sepolia Testnet (for testing)
+    '11155111': '0xe9951582D9F0E8D37F37D0Ef259C5cAaA2E46e4e', // GALACTIC token contract
+    
+    // Local Hardhat Network
+    '31337': '0x0000000000000000000000000000000000000000', // Replace with actual address
+    
+    // Default fallback
+    'default': '0xe9951582D9F0E8D37F37D0Ef259C5cAaA2E46e4e'
   }
 }
 

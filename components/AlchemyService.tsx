@@ -218,11 +218,20 @@ export class AlchemyNFTService {
           const shipType = mapNFTToShipType(nft)
           const gameData = generateGameData(nft.tokenId)
           
+          // Ensure tokenId is a string and properly formatted
+          const tokenId = String(nft.tokenId)
+          console.log(`🔍 Token ID processing:`, {
+            original: nft.tokenId,
+            originalType: typeof nft.tokenId,
+            converted: tokenId,
+            convertedType: typeof tokenId
+          })
+          
           return {
-            tokenId: nft.tokenId,
+            tokenId: tokenId,
             contractAddress: nft.contract?.address || '',
             shipType,
-            name: nft.title || nft.name || `Ship #${nft.tokenId}`,
+            name: nft.title || nft.name || `Ship #${tokenId}`,
             description: nft.description || SHIP_TYPES[shipType].description,
             image: nft.media?.[0]?.gateway || nft.media?.[0]?.raw || nft.image?.originalUrl || '',
             mintedAt: new Date().toISOString().split('T')[0],

@@ -37,16 +37,11 @@ export default function MyFleet() {
         console.log('\n📡 Now fetching with current configuration...')
         
         // Try without contract filtering first
-        console.log('🔄 Attempt 1: Fetching ALL NFTs (no contract filter)...')
-        let nfts = await alchemyNFTService.getNFTsForOwner(account)
-        
-        if (nfts.length === 0 && process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS) {
-          console.log('🔄 Attempt 2: Fetching with contract filter...')
-          nfts = await alchemyNFTService.getNFTsForOwner(
-            account,
-            process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS
-          )
-        }
+        // Only fetch NFTs from the new contract address
+        const contractAddress = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS
+        console.log('🎯 Fleet: Fetching NFTs from contract:', contractAddress)
+        const nfts = await alchemyNFTService.getNFTsForOwner(account, contractAddress)
+        console.log('🎮 Fleet: Found NFTs from new contract:', nfts.length)
         
         console.log('Fetched NFTs:', nfts)
         setUserNFTs(nfts)

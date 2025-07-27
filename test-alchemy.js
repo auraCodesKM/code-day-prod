@@ -5,8 +5,8 @@ const { Alchemy, Network } = require('alchemy-sdk');
 
 // Your configuration
 const API_KEY = 'mKSXhkHH4QGGKApSV9bmVUoFwuetHWWw';
-const WALLET_ADDRESS = 'YOUR_WALLET_ADDRESS_HERE'; // Replace with your actual wallet address
-const CONTRACT_ADDRESS = '0xbdFD697ae59ECbDe6B25D632f064Ec9F0ab8A1F7';
+const WALLET_ADDRESS = '0x5628175c6C9142275FE25Aa5943D89DE50f508d0'; // Your actual wallet address
+const CONTRACT_ADDRESS = '0xc624865cD93c176a6016814e3560753b7Cb26C38'; // New NFT contract
 
 async function testAlchemy() {
   console.log('🧪 Testing Alchemy API...\n');
