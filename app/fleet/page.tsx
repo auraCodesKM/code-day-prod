@@ -142,19 +142,91 @@ export default function MyFleet() {
       {/* Main Content */}
       <main className="relative z-10 pt-24 p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Page Header */}
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: -50 }}
+          {/* Enhanced Header with Holographic Effects */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-center mb-12 relative"
           >
-            <h1 className="font-pixel text-4xl md:text-6xl text-neon-blue mb-4 animate-glow">
-              MY FLEET
-            </h1>
-            <p className="font-arcade text-lg text-neon-green max-w-2xl mx-auto">
-              Command your cosmic armada. View your NFT spaceships, track missions, and manage your fleet.
-            </p>
+            {/* Holographic Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neon-blue/5 to-transparent animate-pulse" />
+            <div className="absolute inset-0 bg-[url('/grid.png')] opacity-10 animate-float" />
+            
+            <motion.div
+              className="relative z-10"
+              animate={{ 
+                filter: [
+                  'drop-shadow(0 0 10px #00f5ff)',
+                  'drop-shadow(0 0 20px #00f5ff) drop-shadow(0 0 30px #00f5ff)',
+                  'drop-shadow(0 0 10px #00f5ff)'
+                ]
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <motion.h1 
+                className="font-pixel text-6xl text-neon-blue mb-4 relative"
+                animate={{ 
+                  textShadow: [
+                    '0 0 20px #00f5ff, 0 0 40px #00f5ff',
+                    '0 0 30px #00f5ff, 0 0 60px #00f5ff, 0 0 80px #00f5ff',
+                    '0 0 20px #00f5ff, 0 0 40px #00f5ff'
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className="relative">
+                  MY FLEET
+                  {/* Glitch Effect Overlay */}
+                  <motion.span
+                    className="absolute inset-0 text-neon-red opacity-0"
+                    animate={{ 
+                      opacity: [0, 0, 0, 0.3, 0, 0, 0],
+                      x: [0, 2, -2, 0, 1, -1, 0]
+                    }}
+                    transition={{ duration: 4, repeat: Infinity, repeatDelay: 3 }}
+                  >
+                    MY FLEET
+                  </motion.span>
+                </span>
+              </motion.h1>
+            </motion.div>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="font-arcade text-lg text-gray-300 max-w-2xl mx-auto relative z-10"
+            >
+              <motion.span
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Command your cosmic armada. View your NFT spaceships, track 
+                missions, and manage your fleet.
+              </motion.span>
+            </motion.p>
+            
+            {/* Floating Particles */}
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-neon-blue rounded-full"
+                style={{
+                  left: `${20 + i * 12}%`,
+                  top: `${30 + (i % 2) * 40}%`
+                }}
+                animate={{
+                  y: [-10, 10, -10],
+                  opacity: [0.3, 1, 0.3],
+                  scale: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 3 + i * 0.5,
+                  repeat: Infinity,
+                  delay: i * 0.3
+                }}
+              />
+            ))}
           </motion.div>
 
           {loading ? (
@@ -204,28 +276,188 @@ export default function MyFleet() {
             </motion.div>
           ) : (
             <>
-              {/* Fleet Stats */}
+              {/* Enhanced Fleet Stats with Holographic Effects */}
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                transition={{ delay: 0.3, staggerChildren: 0.1 }}
               >
-                <div className="bg-cyber-gray/30 border border-neon-blue/50 p-6 text-center backdrop-blur-sm">
-                  <Rocket className="w-8 h-8 text-neon-blue mx-auto mb-3 animate-float" />
-                  <div className="font-pixel text-3xl text-neon-blue mb-2">{totalStats.ships}</div>
-                  <div className="font-arcade text-sm text-gray-400">SHIPS OWNED</div>
-                </div>
-                <div className="bg-cyber-gray/30 border border-neon-green/50 p-6 text-center backdrop-blur-sm">
-                  <Target className="w-8 h-8 text-neon-green mx-auto mb-3 animate-pulse" />
-                  <div className="font-pixel text-3xl text-neon-green mb-2">{totalStats.missions}</div>
-                  <div className="font-arcade text-sm text-gray-400">MISSIONS COMPLETED</div>
-                </div>
-                <div className="bg-cyber-gray/30 border border-neon-purple/50 p-6 text-center backdrop-blur-sm">
-                  <Coins className="w-8 h-8 text-neon-purple mx-auto mb-3 animate-bounce" />
-                  <div className="font-pixel text-3xl text-neon-purple mb-2">{totalStats.earnings.toFixed(2)} ETH</div>
-                  <div className="font-arcade text-sm text-gray-400">TOTAL EARNINGS</div>
-                </div>
+                {/* Ships Owned Card */}
+                <motion.div 
+                  className="relative group"
+                  whileHover={{ scale: 1.05, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/20 to-neon-blue/5 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                  <div className="relative bg-cyber-gray/40 border-2 border-neon-blue/50 p-6 text-center backdrop-blur-sm rounded-lg overflow-hidden">
+                    {/* Animated Background Pattern */}
+                    <div className="absolute inset-0 bg-[url('/circuit.png')] opacity-5 animate-float" />
+                    <motion.div
+                      className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-blue to-transparent"
+                      animate={{ x: [-100, 100] }}
+                      transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                    />
+                    
+                    <motion.div
+                      animate={{ 
+                        rotateY: [0, 360],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                    >
+                      <Rocket className="w-10 h-10 text-neon-blue mx-auto mb-4" />
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="font-pixel text-4xl text-neon-blue mb-2"
+                      animate={{ 
+                        textShadow: [
+                          '0 0 10px #00f5ff',
+                          '0 0 20px #00f5ff, 0 0 30px #00f5ff',
+                          '0 0 10px #00f5ff'
+                        ]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      {totalStats.ships}
+                    </motion.div>
+                    <div className="font-arcade text-sm text-gray-300 tracking-wider">SHIPS OWNED</div>
+                    
+                    {/* Hover Effect Particles */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      {[...Array(3)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="absolute w-1 h-1 bg-neon-blue rounded-full"
+                          style={{
+                            left: `${20 + i * 30}%`,
+                            top: `${20 + i * 20}%`
+                          }}
+                          animate={{
+                            y: [-5, 5, -5],
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{
+                            duration: 2 + i * 0.5,
+                            repeat: Infinity,
+                            delay: i * 0.2
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Missions Completed Card */}
+                <motion.div 
+                  className="relative group"
+                  whileHover={{ scale: 1.05, rotateY: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-neon-green/20 to-neon-green/5 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                  <div className="relative bg-cyber-gray/40 border-2 border-neon-green/50 p-6 text-center backdrop-blur-sm rounded-lg overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('/hexagon.png')] opacity-5 animate-pulse" />
+                    <motion.div
+                      className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-green to-transparent"
+                      animate={{ x: [-100, 100] }}
+                      transition={{ duration: 2.5, repeat: Infinity, repeatType: "reverse" }}
+                    />
+                    
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, 180, 360],
+                        scale: [1, 1.2, 1]
+                      }}
+                      transition={{ duration: 5, repeat: Infinity }}
+                    >
+                      <Target className="w-10 h-10 text-neon-green mx-auto mb-4" />
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="font-pixel text-4xl text-neon-green mb-2"
+                      animate={{ 
+                        textShadow: [
+                          '0 0 10px #00ff88',
+                          '0 0 20px #00ff88, 0 0 30px #00ff88',
+                          '0 0 10px #00ff88'
+                        ]
+                      }}
+                      transition={{ duration: 2.2, repeat: Infinity }}
+                    >
+                      {totalStats.missions}
+                    </motion.div>
+                    <div className="font-arcade text-sm text-gray-300 tracking-wider">MISSIONS COMPLETED</div>
+                  </div>
+                </motion.div>
+
+                {/* Total Earnings Card */}
+                <motion.div 
+                  className="relative group"
+                  whileHover={{ scale: 1.05, rotateY: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-neon-purple/20 to-neon-purple/5 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-500" />
+                  <div className="relative bg-cyber-gray/40 border-2 border-neon-purple/50 p-6 text-center backdrop-blur-sm rounded-lg overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('/diamond.png')] opacity-5 animate-bounce" />
+                    <motion.div
+                      className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-neon-purple to-transparent"
+                      animate={{ x: [-100, 100] }}
+                      transition={{ duration: 3.5, repeat: Infinity, repeatType: "reverse" }}
+                    />
+                    
+                    <motion.div
+                      animate={{ 
+                        rotateZ: [0, 15, -15, 0],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                    >
+                      <Coins className="w-10 h-10 text-neon-purple mx-auto mb-4" />
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="font-pixel text-4xl text-neon-purple mb-2"
+                      animate={{ 
+                        textShadow: [
+                          '0 0 10px #a855f7',
+                          '0 0 20px #a855f7, 0 0 30px #a855f7',
+                          '0 0 10px #a855f7'
+                        ]
+                      }}
+                      transition={{ duration: 1.8, repeat: Infinity }}
+                    >
+                      {totalStats.earnings.toFixed(2)}
+                    </motion.div>
+                    <div className="font-arcade text-xs text-neon-purple mb-1 tracking-wider">GALACTIC</div>
+                    <div className="font-arcade text-sm text-gray-300 tracking-wider">TOTAL EARNINGS</div>
+                    
+                    {/* Coin Rain Effect on Hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden">
+                      {[...Array(5)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="absolute w-2 h-2 bg-neon-purple rounded-full"
+                          style={{
+                            left: `${10 + i * 20}%`,
+                            top: '-10px'
+                          }}
+                          animate={{
+                            y: [0, 120],
+                            opacity: [1, 0],
+                            rotate: [0, 360]
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            delay: i * 0.3,
+                            ease: "easeOut"
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
 
               {/* Fleet Grid */}
@@ -312,7 +544,7 @@ export default function MyFleet() {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="font-arcade text-xs text-gray-400">Earnings</span>
-                          <span className="font-pixel text-xs text-neon-purple">{nft.earnings} ETH</span>
+                          <span className="font-pixel text-xs text-neon-purple">{nft.earnings} GALACTIC</span>
                         </div>
                       </div>
 
