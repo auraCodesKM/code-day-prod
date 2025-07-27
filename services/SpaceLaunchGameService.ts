@@ -142,7 +142,7 @@ export class SpaceLaunchGameService {
      
 
       return {
-        rewardAmount: 100,
+        rewardAmount: '100',
         successRate: 49
       }
     } catch (error) {

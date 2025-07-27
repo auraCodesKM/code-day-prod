@@ -1,5 +1,7 @@
 {
-  "/mission/page": "app/mission/page.js",
+  "/_not-found": "app/_not-found.js",
   "/fleet/page": "app/fleet/page.js",
+  "/marketplace/page": "app/marketplace/page.js",
+  "/mission/page": "app/mission/page.js",
   "/page": "app/page.js"
 }
