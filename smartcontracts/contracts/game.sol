@@ -5,24 +5,33 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+interface ISpaceNFT {
+    function burn(uint256 tokenId) external;
+}
+
 contract SpaceLaunchGame is Ownable {
     IERC721 public spaceNFT;
     IERC20 public galacticToken;
 
     uint256 public rewardAmount = 100 * 10**18; 
-    uint256 public successRate = 49; 
+    uint256 public successRate = 49;
 
     mapping(address => uint256) public successfulLaunches;
+    mapping(address => uint256) public launchAttempts;
+    mapping(address => uint256) public galacticWon;
 
     event LaunchResult(address indexed user, uint256 tokenId, bool success);
 
-    constructor(address _nftAddress, address _erc20Address) {
+    constructor(address _nftAddress, address _erc20Address) Ownable(msg.sender) {
         spaceNFT = IERC721(_nftAddress);
         galacticToken = IERC20(_erc20Address);
     }
 
     function launchMission(uint256 tokenId) external {
-        require(spaceNFT.ownerOf(tokenId) == msg.sender, "You don’t own this ship");
+        require(spaceNFT.ownerOf(tokenId) == msg.sender, "You dont own this ship");
+
+        // Increment total launch attempts
+        launchAttempts[msg.sender]++;
 
         spaceNFT.transferFrom(msg.sender, address(this), tokenId);
 
@@ -32,8 +41,9 @@ contract SpaceLaunchGame is Ownable {
             spaceNFT.transferFrom(address(this), msg.sender, tokenId);
             galacticToken.transfer(msg.sender, rewardAmount);
             successfulLaunches[msg.sender]++;
+            galacticWon[msg.sender] += rewardAmount;
         } else {
-            SpaceNFT(address(spaceNFT)).burn(tokenId);
+            ISpaceNFT(address(spaceNFT)).burn(tokenId);
         }
 
         emit LaunchResult(msg.sender, tokenId, success);
